@@ -1,0 +1,8 @@
+{
+    "server": "xx.xx.xxx.xxxx",
+    "server_port": 10000,
+    "password": "xxxxxxxxx",
+    "method": "aes-256-gcm",
+    "mode": "tcp_and_udp",
+    "fast_open": true
+}
