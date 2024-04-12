@@ -17,7 +17,7 @@
 
 ## Turso 建表
 
-输入 turso db shell [db-name] 命令，这会开启一个 SQL 会话，把 [SQL 的建表语句](./db/create_table.sql)输入进去。
+输入 turso db shell [db-name] 命令，这会开启一个 SQL 会话，把 [SQL 的建表语句](../db/create_table.sql)输入进去。
 
 ## 最后
 
