@@ -6,12 +6,12 @@
 
 ## Turso 初始化
 
-配置信息使用 Turso 的数据库保存，这是唯一的外部依赖。在网页端授权 Github 登陆创建好账号后，可以在本地安装 [Truso Cli](https://docs.turso.tech/reference/turso-cli) 工具，安装好后：
+配置信息使用 Turso 的数据库保存，这是唯一的外部依赖。在网页端授权 Github 登陆创建好账号后，可以在本地安装 [Turso Cli](https://docs.turso.tech/reference/turso-cli) 工具，安装好后：
 
 1. turso auth login
 2. turso db create [db-name]
 3. turso db show [db-name] --url
-4. turso db tokens created [db-name]
+4. turso db tokens create [db-name]
 
 把第三行和第四行的输出分别填写到 .env.local 的第一行和第二行。
 
