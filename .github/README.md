@@ -40,12 +40,12 @@
 
 2020 年成立，SS 协议 + IPLC 线路。80+ 全球节点（港 / 台 / 日 / 新 / 美等），全流媒媒体解锁。
 
-月付 ¥25 起，150 GB 流量，另有少流量用户特惠：年付 ¥96，每月 60 GB流量，[点我注册](https://ivt01.qytaff.cc/register?aff=noUz4H25)。
+月付 ¥25 起，150 GB 流量，另有少流量用户特惠：年付 ¥96，每月 60 GB流量，[点我注册](https://ponzicc.qytvipaff.cc/register?aff=noUz4H25)。
 
 ### 银河云
 
 2024 年新成立， Trojan + IEPL 线路。30+ 常用地区节点。
 
-月付 ¥18 起，100GB 流量，另有 ¥680 售价的 1000G 不限时套餐可选，[点我注册](https://inv02.galaxyaff.cc/register?aff=v6mY636X)。
+月付 ¥18 起，100GB 流量，另有 ¥680 售价的 1000G 不限时套餐可选，[点我注册](https://ponzicc.galaxyvipaff01.cc/register?aff=v6mY636X)。
 
 可点击上方注册链接选择月付体验稳定性，再考虑季付 / 年付。
