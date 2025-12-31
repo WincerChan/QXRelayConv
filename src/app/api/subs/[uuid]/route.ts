@@ -7,7 +7,8 @@ import { getEnvValue } from "@/lib/env";
 interface Ret {
     [key: string]: string
 }
-export async function GET(request: NextRequest, { params }: { params: { uuid: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ uuid: string }> }) {
+    const { uuid } = await params;
     const group = await tursoClient().execute({
         sql: "SELECT * FROM relay_conf WHERE type = ? or type = ?;",
         args: ["group_name", "rule_token"]
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
         `# NAME: ${ret.group_name}`,
         `ip-cidr, ${serverHost}/32, ♾️ Relay`,
     ]
-    if (ret.rule_token !== params.uuid) {
+    if (ret.rule_token !== uuid) {
         return new Response("404 Not Found", {
             status: 404,
         })
