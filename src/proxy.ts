@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const TOKEN = process.env.QXRELAY_AUTH_TOKEN
     const token = request.cookies.get("auth-token")?.value
     const redirectURL = request.nextUrl.clone()
