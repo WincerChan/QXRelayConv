@@ -1,5 +1,5 @@
 
-import { tursoClient } from "@/utils/tursoClient";
+import { tursoClient } from "@/lib/tursoClient";
 import { NextRequest, NextResponse } from "next/server";
 
 interface RelayConf {

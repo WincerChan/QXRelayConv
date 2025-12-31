@@ -1,4 +1,4 @@
-import validate from "@/utils/validate_file";
+import validate from "@/lib/validate_file";
 import { NextRequest, NextResponse } from "next/server";
 
 // check shadowsocket server is avaible

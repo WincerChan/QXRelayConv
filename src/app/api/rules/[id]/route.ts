@@ -1,5 +1,5 @@
 
-import { tursoClient } from "@/utils/tursoClient";
+import { tursoClient } from "@/lib/tursoClient";
 import { NextRequest } from "next/server";
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     tursoClient().execute({

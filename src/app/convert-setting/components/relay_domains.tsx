@@ -1,4 +1,4 @@
-import fetcher from "@/utils/swr_fetcher"
+import fetcher from "@/lib/swr_fetcher"
 import { Icon } from "@iconify/react"
 import { useEffect, useState } from "react"
 import useSWR from "swr"

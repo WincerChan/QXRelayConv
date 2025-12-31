@@ -1,5 +1,5 @@
-import { tursoClient } from "@/utils/tursoClient";
-import validate from "@/utils/validate_file";
+import { tursoClient } from "@/lib/tursoClient";
+import validate from "@/lib/validate_file";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: { uuid: string } }) {

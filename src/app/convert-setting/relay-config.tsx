@@ -1,4 +1,4 @@
-import fetcher from '@/utils/swr_fetcher';
+import fetcher from '@/lib/swr_fetcher';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import RelayDomains from './components/relay_domains';

@@ -1,5 +1,5 @@
 "use client"
-import fetcher from "@/utils/swr_fetcher";
+import fetcher from "@/lib/swr_fetcher";
 import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from 'react';
