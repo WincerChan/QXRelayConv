@@ -10,93 +10,137 @@ interface RuleType {
 }
 
 const RuleList = ({ submit }: { submit: boolean }) => {
-    const { data, mutate } = useSWR<RuleType[]>("/api/rules", fetcher)
+    const { data, mutate, isLoading } = useSWR<RuleType[]>("/api/rules", fetcher)
     const [notice, setNotice] = useState(false)
+    const [deletingId, setDeletingId] = useState<number | null>(null);
 
-    if (submit) {
-        mutate()
-    }
-    const deleteRule = (id: number) => {
-        fetch(`/api/rules/${id}`, {
-            method: 'delete'
-        })
-            .then(x => { console.log(x.statusText); setNotice(true); mutate() })
+    useEffect(() => {
+        if (submit) {
+            mutate()
+        }
+    }, [submit, mutate])
+
+    const deleteRule = async (id: number) => {
+        setDeletingId(id);
+        try {
+            await fetch(`/api/rules/${id}`, {
+                method: 'delete'
+            })
+            setNotice(true);
+            mutate();
+        } finally {
+            setDeletingId(null);
+        }
     }
 
-    if (!data) return <></>
+    if (!data && isLoading) return (
+        <div className="p-8 text-center text-muted-foreground">
+             <Icon icon="line-md:loading-loop" className="w-6 h-6 mx-auto animate-spin" />
+        </div>
+    )
+    
+    if (!data || data.length === 0) return (
+        <div className="p-8 text-center text-muted-foreground border-t bg-muted/5">
+            暂无中转域名规则
+        </div>
+    )
 
     return (
         <>
-            <Toast name="删除成功" show={notice} setShow={setNotice} />
-            <div className='w-[640px] mx-auto grid grid-cols-3 gap-x-6'>
-                {
-                    data.map(
-                        (v) => (
-                            <div key={v.id} className='w-full flex space-x-4 py-4'>
-                                <span style={{ overflow: 'hidden', width: "72%" }} className='text-ellipsis '>{v.suffix}</span>
-                                <button className='' onClick={() => deleteRule(v.id)}>
-                                    <Icon icon="solar:trash-bin-minimalistic-2-broken" className='w-6 h-6' />
-                                </button>
-                            </div>
-                        )
-                    )
-                }
+            <Toast name="规则已删除" show={notice} setShow={setNotice} />
+            <div className="border-t divide-y">
+                {data.map((v) => (
+                    <div key={v.id} className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center space-x-3 overflow-hidden">
+                            <Icon icon="solar:global-bold" className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                            <span className="text-sm font-medium truncate">{v.suffix}</span>
+                        </div>
+                        <button 
+                            onClick={() => deleteRule(v.id)}
+                            disabled={deletingId === v.id}
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                        >
+                            {deletingId === v.id ? (
+                                <Icon icon="line-md:loading-loop" className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Icon icon="solar:trash-bin-trash-bold" className="w-4 h-4" />
+                            )}
+                        </button>
+                    </div>
+                ))}
             </div>
         </>
     )
 }
 
-
-
 const RelayDomains = ({ show }: { show: boolean }) => {
     const [submit, setSubmit] = useState(false)
     const [notice, setNotice] = useState(false)
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Handle the submission logic here
+        setLoading(true);
         const formData = new FormData(event.currentTarget)
         const data = Object.fromEntries(formData.entries())
-        const response = await fetch('/api/rules', {
-            method: "post",
-            body: JSON.stringify(data)
-        })
-        const ret = await response.json()
-        setSubmit(true)
-        setTimeout(() => setSubmit(false), 100)
+        
+        try {
+            await fetch('/api/rules', {
+                method: "post",
+                body: JSON.stringify(data)
+            })
+            setNotice(true)
+            setSubmit(true)
+            // Reset input
+            event.currentTarget.reset();
+            setTimeout(() => setSubmit(false), 500)
+        } finally {
+            setLoading(false);
+        }
     };
-    useEffect(() => {
-        if (submit) setNotice(true)
-    }, [submit])
 
     return (
-        <>
-            <h2 id="域名" className="text-3xl mt-6 text-center mb-8">中转域名配置</h2>
-            <Toast name="提交成功" show={notice} setShow={setNotice} />
-            <form onSubmit={handleSubmit} className="space-y-6 w-[640px] flex mx-auto justify-center pb-6">
-                <div className='flex flex-grow space-x-8 mr-8'>
-                    <div className='w-full'>
-                        <label htmlFor="chineseAddress" className="text-sm font-medium text-gray-700 block mb-2">中转域名</label>
+        <div className="bg-card border shadow-sm rounded-xl overflow-hidden">
+            <div className="px-6 py-4 border-b bg-muted/20">
+                <h2 className="text-lg font-medium text-card-foreground">中转域名配置</h2>
+                <p className="text-sm text-muted-foreground">添加需要通过中转节点访问的域名后缀</p>
+            </div>
+
+            <Toast name="域名添加成功" show={notice} setShow={setNotice} />
+            
+            <div className="p-6">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 items-end mb-6">
+                    <div className="flex-1 w-full space-y-2">
+                        <label htmlFor="suffix" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            新增域名后缀
+                        </label>
                         <input
                             type="text"
                             name="suffix"
-                            className="border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
-                            placeholder="请输入中转域名"
+                            id="suffix"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="例如: google.com"
                             required
                         />
                     </div>
-                </div>
-                <div className="flex flex-0 space-x-8 pt-1">
                     <button
-                        disabled={!show}
+                        disabled={!show || loading}
                         type="submit"
-                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 text-center"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full sm:w-auto min-w-[100px]"
                     >
-                        提交
+                         {loading && <Icon icon="line-md:loading-loop" className="mr-2 h-4 w-4 animate-spin" />}
+                        添加
                     </button>
+                </form>
+                
+                <div className="rounded-md border">
+                    <div className="bg-muted/50 px-4 py-3 text-xs font-medium text-muted-foreground border-b">
+                        已配置规则列表
+                    </div>
+                    <RuleList submit={submit} />
                 </div>
-            </form>
-            <RuleList submit={submit} />
-        </>
+            </div>
+        </div>
     )
 }
 

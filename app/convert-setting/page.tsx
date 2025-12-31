@@ -11,46 +11,63 @@ interface RelayReadyData {
     msg: string
 }
 
-
 const StatusPage: React.FC = () => {
-    // State to manage the toggle status, assuming true as default for demonstration
     const [checked, setChecked] = useState(false);
-
     const { data, error, isLoading } = useSWR<RelayReadyData>("/api/is-relay-ready", fetcher)
 
     useEffect(() => {
         if (!isLoading && data && data.enabled) {
+            // Keep the small delay for smooth transition feel
             setTimeout(() => setChecked(true), 200)
         }
-    }, [isLoading])
+    }, [isLoading, data])
 
     return (
-        <main className='p-8 xl:w-[1200px] mx-auto min-h-screen'>
-            <h1 className="text-2xl font-bold mb-16">Quantumult X Relay Convert</h1>
-            {!checked && <div className="flex items-center text-xl justify-center ">
-                <div className="p-8 rounded-lg space-y-8 mb-40 h-12">
-                    {isLoading &&
-                        <div className="flex items-center space-x-4">
-                            <Icon className="w-6 h-6 text-yellow-600" icon="eos-icons:hourglass" />
-                            <span>正在检测是否开启中转</span>
-                        </div>
-                    }
-                    {
-                        !isLoading && data && data.enabled && !checked &&
-                        <div className="flex items-center space-x-4">
-                            <Icon className="w-6 h-6 text-green-500" icon="solar:check-circle-broken" />
-                            <span>已识别到本服务器代理</span>
-                        </div>
-                    }
-                    {
-                        !isLoading && data && !data.enabled &&
-                        <div className="flex items-center space-x-4">
-                            <span>❗️服务器代理配置错误：{data.msg}，请修正后再试</span>
-                        </div>
-                    }
+        <main className='min-h-screen bg-muted/40 py-12 px-4 sm:px-6 lg:px-8'>
+            <div className="max-w-4xl mx-auto">
+                <div className="flex flex-col items-center mb-12">
+                     <h1 className="text-3xl font-bold tracking-tight text-foreground">Quantumult X Relay Convert</h1>
+                     <p className="text-muted-foreground mt-2">配置您的中转节点与规则</p>
                 </div>
-            </div>}
-            {checked && <RelayComp />}
+
+                {!checked && (
+                    <div className="flex flex-col items-center justify-center py-20 animate__animated animate__zoomIn animate__faster">
+                        <div className="bg-card border shadow-sm rounded-xl p-8 max-w-lg w-full text-center space-y-4">
+                            {isLoading && (
+                                <div className="flex flex-col items-center space-y-4">
+                                    <Icon className="w-12 h-12 text-primary animate-spin" icon="eos-icons:loading" />
+                                    <span className="text-lg font-medium">正在检测服务器环境...</span>
+                                </div>
+                            )}
+                            
+                            {!isLoading && data && data.enabled && !checked && (
+                                <div className="flex flex-col items-center space-y-4">
+                                    <Icon className="w-12 h-12 text-green-500" icon="solar:check-circle-bold" />
+                                    <span className="text-lg font-medium">环境检测通过</span>
+                                </div>
+                            )}
+
+                            {!isLoading && (data?.enabled === false || error) && (
+                                <div className="flex flex-col items-center space-y-4">
+                                    <Icon className="w-12 h-12 text-destructive" icon="solar:danger-triangle-bold" />
+                                    <div className="text-destructive font-medium">
+                                        检测失败
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">
+                                        {data?.msg || "无法连接到 API，请检查网络或服务器日志。"}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+                
+                {checked && (
+                    <div className="animate__animated animate__fadeInUp">
+                        <RelayComp />
+                    </div>
+                )}
+            </div>
         </main>
     );
 };
