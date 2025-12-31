@@ -3,6 +3,7 @@
 ### .env 文件
 
 把 .env.sample 文件重命名为 .env.local。
+可选：设置 QXRELAY_PUBLIC_HOST 用于订阅返回的公网地址（建议公网 IP 或域名）。
 
 ### Turso 初始化
 

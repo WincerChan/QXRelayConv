@@ -14,6 +14,8 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
     })
     const shadowConfigPath = getEnvValue("QXRELAY_SHADOW_CONFIG_PATH");
     const t = await validate(shadowConfigPath as string)
+    const publicHost = getEnvValue("QXRELAY_PUBLIC_HOST");
+    const serverHost = publicHost ?? t.server;
     const ret: Ret = {}
     group.rows.forEach(x => {
         ret[x.type as string] = x.value as string
@@ -25,7 +27,7 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
     }
     const total_rules = [
         `# NAME: ${ret.group_name}`,
-        `ip-cidr, ${t.server}/32, ♾️ Relay`,
+        `ip-cidr, ${serverHost}/32, ♾️ Relay`,
     ]
     if (ret.rule_token !== params.uuid) {
         return new Response("404 Not Found", {

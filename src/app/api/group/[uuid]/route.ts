@@ -26,7 +26,9 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
     const resources = []
     const shadowConfigPath = getEnvValue("QXRELAY_SHADOW_CONFIG_PATH");
     const t = await validate(shadowConfigPath as string)
-    resources.push(`shadowsocks=${t.server}:${t.server_port}`)
+    const publicHost = getEnvValue("QXRELAY_PUBLIC_HOST");
+    const serverHost = publicHost ?? t.server;
+    resources.push(`shadowsocks=${serverHost}:${t.server_port}`)
     resources.push(`method=${t.method}`)
     resources.push(`password=${t.password}`)
     resources.push("fast-open=true")
