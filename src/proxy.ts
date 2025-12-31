@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { getEnvValue } from "@/lib/env";
 
 
 export function proxy(request: NextRequest) {
-    const TOKEN = process.env.QXRELAY_AUTH_TOKEN
+    const TOKEN = getEnvValue("QXRELAY_AUTH_TOKEN");
     const token = request.cookies.get("auth-token")?.value
     const redirectURL = request.nextUrl.clone()
     redirectURL.pathname = "/"

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { getEnvValue } from "@/lib/env";
 
 const schema = z.object({
     'password': z.string(),
@@ -19,11 +20,12 @@ export async function POST(request: NextRequest) {
     const data = schema.parse(t)
     const redirectURL = request.nextUrl.clone()
     redirectURL.pathname = "/convert-setting"
-    console.log(process.env.QXRELAY_AUTH_TOKEN)
-    if (process.env.QXRELAY_AUTH_TOKEN !== data.password) {
+    const authToken = getEnvValue("QXRELAY_AUTH_TOKEN");
+    console.log(authToken)
+    if (authToken !== data.password) {
         return NextResponse.json({ "err": "invalid auth token" }, { status: 401 })
     }
-    const randomString = process.env.QXRELAY_AUTH_TOKEN
+    const randomString = authToken
     const resp = NextResponse.json({ 'location': "/convert-setting" }, { status: 200 })
     const cookieSetting: CookieSetting = {
         name: "auth-token",

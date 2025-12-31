@@ -1,6 +1,7 @@
 import { tursoClient } from "@/lib/tursoClient";
 import validate from "@/lib/validate_file";
 import { NextRequest } from "next/server";
+import { getEnvValue } from "@/lib/env";
 
 export async function GET(request: NextRequest, { params }: { params: { uuid: string } }) {
     const ret = await tursoClient().execute({
@@ -23,7 +24,8 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
             args: ["group_token", params.uuid]
         })
     const resources = []
-    const t = await validate(process.env.QXRELAY_SHADOW_CONFIG_PATH as string)
+    const shadowConfigPath = getEnvValue("QXRELAY_SHADOW_CONFIG_PATH");
+    const t = await validate(shadowConfigPath as string)
     resources.push(`shadowsocks=${t.server}:${t.server_port}`)
     resources.push(`method=${t.method}`)
     resources.push(`password=${t.password}`)

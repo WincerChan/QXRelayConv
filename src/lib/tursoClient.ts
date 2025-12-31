@@ -1,12 +1,13 @@
 import { Client, createClient } from '@libsql/client/http';
+import { getEnvValue } from "@/lib/env";
 
 export function tursoClient(): Client {
-    const url = process.env.QXRELAY_TURSO_URL?.trim();
+    const url = getEnvValue("QXRELAY_TURSO_URL");
     if (url === undefined) {
         throw new Error('QXRELAY_TURSO_URL is not defined');
     }
 
-    const authToken = process.env.QXRELAY_TURSO_AUTH_TOKEN?.trim();
+    const authToken = getEnvValue("QXRELAY_TURSO_AUTH_TOKEN");
     if (authToken === undefined) {
         if (!url.includes('file:')) {
             throw new Error('QXRELAY_TURSO_AUTH_TOKEN is not defined');
