@@ -13,7 +13,7 @@
 3. turso db show [db-name] --url
 4. turso db tokens create [db-name]
 
-把第三行和第四行的输出分别填写到 .env.local 的第一行和第二行。
+把第三行和第四行的输出分别填写到 .env.local 的第一行和第二行（QXRELAY_TURSO_URL / QXRELAY_TURSO_AUTH_TOKEN）。
 
 ### Turso 建表
 

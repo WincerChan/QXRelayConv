@@ -19,11 +19,11 @@ export async function POST(request: NextRequest) {
     const data = schema.parse(t)
     const redirectURL = request.nextUrl.clone()
     redirectURL.pathname = "/convert-setting"
-    console.log(process.env.NEXT_AUTH_TOKEN)
-    if (process.env.NEXT_AUTH_TOKEN !== data.password) {
+    console.log(process.env.QXRELAY_AUTH_TOKEN)
+    if (process.env.QXRELAY_AUTH_TOKEN !== data.password) {
         return NextResponse.json({ "err": "invalid auth token" }, { status: 401 })
     }
-    const randomString = process.env.NEXT_AUTH_TOKEN
+    const randomString = process.env.QXRELAY_AUTH_TOKEN
     const resp = NextResponse.json({ 'location': "/convert-setting" }, { status: 200 })
     const cookieSetting: CookieSetting = {
         name: "auth-token",

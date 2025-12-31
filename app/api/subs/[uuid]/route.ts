@@ -11,7 +11,7 @@ export async function GET(request: NextRequest, { params }: { params: { uuid: st
         sql: "SELECT * FROM relay_conf WHERE type = ? or type = ?;",
         args: ["group_name", "rule_token"]
     })
-    const t = await validate(process.env.NEXT_SHADOW_CONFIG_PATH as string)
+    const t = await validate(process.env.QXRELAY_SHADOW_CONFIG_PATH as string)
     const ret: Ret = {}
     group.rows.forEach(x => {
         ret[x.type as string] = x.value as string
